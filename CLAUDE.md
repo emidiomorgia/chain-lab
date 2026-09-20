@@ -78,18 +78,20 @@ backlog task edit <id> --check-dod <n>   # per ogni DoD verificato
 ```
 
 > **CHECKPOINT 3** — mostra diff/codice, note di implementazione, AC e DoD
-> spuntati. Aspetta conferma prima di archiviare.
+> spuntati. Aspetta conferma prima di completare.
 
-**4. Archiviazione**
+**4. Completamento**
 ```
-backlog task archive <id>
+backlog task edit <id> -s Done
 ```
-Solo dopo checkpoint 3 positivo e AC/DoD tutti spuntati.
+Solo dopo checkpoint 3 positivo e AC/DoD tutti spuntati. Il task **resta
+visibile sulla board**, in colonna Done — non viene archiviato qui. L'archivio
+fisico avviene solo alla chiusura della change (vedi sotto).
 
-## Sync dopo ogni archiviazione
+## Sync dopo il completamento (Done) di ogni task
 
 **Locale (`changes/<slug>/`) — sempre:**
-- `spec.md`: append di descrizione + AC del task appena archiviato
+- `spec.md`: append di descrizione + AC del task appena completato
 - `changelog.md`: append del final-summary del task
 - `adr.md`: se il task referenzia una `backlog decision`, integra il contenuto
   della decisione (non duplicarla parola per parola, riassumi in ottica ADR)
@@ -107,10 +109,21 @@ Se hai dubbi se una modifica è "duratura" abbastanza per `docs/specs.md` o
 
 ## Chiusura di una change
 
-Quando tutti i task del milestone sono archiviati:
+Quando tutti i task del milestone sono in stato Done (non prima):
 1. Verifica coerenza tra `changes/<slug>/spec.md` e stato reale del codice
-2. `backlog milestone archive <milestone-id>`
-3. Sposta `changes/<slug>/` in `changes/archive/YYYY-MM-DD-<slug>/`
+2. Archivia fisicamente ogni task Done del milestone: per ciascuno,
+   `backlog task archive <id>` — questo è il momento in cui i task lasciano
+   la board ed entrano in `backlog/completed/` (nome interno di Backlog.md
+   per i task archiviati, non è un bug se lo trovi lì e non in una cartella
+   "archive")
+3. `backlog milestone archive <milestone-id>`
+4. Sposta `changes/<slug>/` in `changes/archive/YYYY-MM-DD-<slug>/`
+
+Nota: l'archiviazione dei task (passo 2) è un'operazione di sola pulizia
+interna a Backlog.md — la documentazione (spec/adr/changelog locali e
+generali) è già stata scritta al momento del completamento di ogni task,
+non qui. Se un task del milestone non è ancora Done, fermati e dimmelo
+invece di proseguire con la chiusura.
 
 ## Branching
 
@@ -129,27 +142,3 @@ Quando tutti i task del milestone sono archiviati:
 - Non saltare checkpoint anche se il task sembra banale — è l'utente a
   decidere quando abbreviare, non l'agente di sua iniziativa
 - Tono nei commit e nelle note: diretto, senza filler
-
-<!-- BACKLOG.MD GUIDELINES START -->
-<!-- backlog.md-instructions-version: 1.52.0 -->
-<CRITICAL_INSTRUCTION>
-
-## Backlog.md Workflow
-
-This project uses Backlog.md for task and project management.
-
-**At the beginning of each conversation in this project, run `backlog instructions overview` before answering or taking action. Re-read it only if you have not read it yet in the current conversation.**
-
-Use the overview to decide whether to search, read, create, or update Backlog tasks.
-
-Before task lifecycle actions, read the matching detailed guide:
-- `backlog instructions task-creation` before creating or splitting tasks
-- `backlog instructions task-execution` before planning, changing status or assignee, adding a plan or implementation notes, or implementing task work
-- `backlog instructions task-finalization` before checking acceptance criteria, writing final summaries, or moving tasks to terminal statuses
-
-Use `backlog <command> --help` before running unfamiliar commands. Help shows options, fields, and examples.
-
-Do not edit Backlog task, draft, document, decision, or milestone markdown files directly. Use the `backlog` CLI so metadata, relationships, and history stay consistent.
-
-</CRITICAL_INSTRUCTION>
-<!-- BACKLOG.MD GUIDELINES END -->

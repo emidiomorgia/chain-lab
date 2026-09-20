@@ -1,12 +1,14 @@
 ---
-description: Archivia un task verificato e sincronizza i file locali/generali (dopo checkpoint 3)
+description: Segna un task come Done e sincronizza i file locali/generali (dopo checkpoint 3)
 argument-hint: [task-id] [slug-change]
 ---
 
 Task id: $1 — change: $2
 
-Segui "Archiviazione" e "Sync dopo ogni archiviazione" di CLAUDE.md:
-1. `backlog task archive $1`
+Segui "Completamento" e "Sync dopo il completamento (Done) di ogni task" di CLAUDE.md:
+1. `backlog task edit $1 -s Done` — il task resta sulla board, colonna Done.
+   NON eseguire `backlog task archive` qui: l'archiviazione fisica avviene
+   solo con /close-change
 2. Aggiorna SEMPRE (locale):
    - `changes/$2/spec.md` — append di descrizione + AC del task
    - `changes/$2/changelog.md` — append del final-summary
