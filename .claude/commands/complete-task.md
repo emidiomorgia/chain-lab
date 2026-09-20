@@ -1,11 +1,14 @@
 ---
-description: Segna un task come Done e sincronizza i file locali/generali (dopo checkpoint 3)
+description: Approva un task in Verify (Verify -> Done) e sincronizza i file locali/generali
 argument-hint: [task-id] [slug-change]
 ---
 
 Task id: $1 — change: $2
 
-Segui "Completamento" e "Sync dopo il completamento (Done) di ogni task" di CLAUDE.md:
+Precondizione: il task deve essere in stato Verify. Se è ancora In Progress
+o Done, fermati e dimmelo invece di procedere.
+
+Segui "Decisione dell'utente" e "Sync all'approvazione" di CLAUDE.md:
 1. `backlog task edit $1 -s Done` — il task resta sulla board, colonna Done.
    NON eseguire `backlog task archive` qui: l'archiviazione fisica avviene
    solo con /close-change

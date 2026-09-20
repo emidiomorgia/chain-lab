@@ -1,1 +1,0 @@
-# ADR — Project Setup
